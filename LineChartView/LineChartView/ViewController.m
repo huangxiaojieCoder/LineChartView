@@ -82,6 +82,12 @@
     
     self.lineChartView = lineChartView;
     
+    
+    // ab
+    
+    
+    NSLog(@"%@", lineChartView);
+    
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
