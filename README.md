@@ -5,6 +5,6 @@
 
 
 
-[![https://github.com/huangxiaojieCoder/LineChartView/master/Resource/23.gif]](https://github.com/huangxiaojieCoder/LineChartView/master/Resource/23.gif)
-[![](https://github.com/jkpang/PPHub-Feedback/blob/master/Resource/iPhone_s1.png)](https://github.com/jkpang/PPHub-Feedback/blob/master/Resource/iPhone_b1.png)
+[![https://github.com/huangxiaojieCoder/LineChartView/blob/master/Resource/23.gif]](https://github.com/huangxiaojieCoder/LineChartView/blob/master/Resource/23.gif)
+
 
