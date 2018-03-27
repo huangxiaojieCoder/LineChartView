@@ -21,9 +21,9 @@
 
 @property (nonatomic, assign) CGSize charViewSize;
 
-@property (nonatomic, assign) CGFloat marginX;
 
-@property (nonatomic, assign) CGFloat marginY;
+
+
 
 
 @end

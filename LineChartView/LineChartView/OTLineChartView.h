@@ -29,9 +29,6 @@
 /** Y 的最大值*/
 @property (nonatomic, assign) CGFloat maxY;
 
-
-
-
 @property (nonatomic, assign) NSInteger labelCountX;
 @property (nonatomic, assign) NSInteger labelCountY;
 
@@ -45,6 +42,12 @@
 @property (nonatomic, strong) UIColor *lineColor;
 /** 点的颜色 */
 @property (nonatomic, strong) UIColor *pointColor;
+
+/** 包围圈的颜色 */
+@property (nonatomic, strong) UIColor *coverColor;
+
+/** 坐标颜色: 默认是灰色 */
+@property (nonatomic, strong) UIColor *coordinateLineColor;
 
 
 

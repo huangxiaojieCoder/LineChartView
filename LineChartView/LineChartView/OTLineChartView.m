@@ -28,6 +28,12 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        
+        self.coordinateLineColor = [UIColor grayColor];
+        self.lineColor = [UIColor grayColor];
+        self.coverColor = [UIColor redColor];
+        self.pointColor = [UIColor blackColor];
+        
         /** 初始化X轴节点坐标数组 */
         self.xNodeCordAry = [[NSMutableArray alloc] init];
         
@@ -48,7 +54,7 @@
     
     CGRect rect = CGRectMake(self.marginX, self.marginY, self.frame.size.width - self.marginX * 2, self.frame.size.height - self.marginY * 2);
     BOOL contain =  CGRectContainsPoint(rect, point);
-    NSLog(@"%ld", contain);
+
     
     if (contain == NO) {
         return;
@@ -62,9 +68,8 @@
 
     if (self.refresh == YES) {
         self.markerLayer = [CAShapeLayer layer];
-        self.markerLayer.strokeColor = [UIColor grayColor].CGColor;
-        self.markerLayer.fillColor = [UIColor clearColor].CGColor;
-        self.markerLayer.lineWidth = 0.5;
+        self.markerLayer.strokeColor = [UIColor clearColor].CGColor;
+        self.markerLayer.lineWidth = 0.001;
         [self.layer addSublayer:self.markerLayer];
         
         self.markerLabel = [[UILabel alloc] init];
@@ -76,7 +81,6 @@
     
     OTChatData *data = self.datas [index];
     
-  
     self.markerLabel.text =  data.markerText;
  
     CGSize size = [data.markerText sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:10]}];
@@ -98,6 +102,8 @@
     self.markerLabel.font = [UIFont systemFontOfSize:12];
     self.markerLabel.textColor = [UIColor whiteColor];
     
+    self.markerImage.marginX = self.marginX;
+    self.markerImage.marginY = self.marginY;
     [self.markerImage drawContentxt:self.markerLayer point:currentPoint chatData:data rect:self.markerLabel.frame label:self.markerLabel];
     
     
@@ -116,12 +122,10 @@
 - (void)refreshData {
     
     self.refresh = YES;
-    NSLog(@"%@", self.layer.sublayers);
+
     [self.xNodeCordAry removeAllObjects];
     [self.yNodeCordAry removeAllObjects];
 
-    
-    NSLog(@"%@", self.subviews);
     for (UIView *subView in self.subviews) {
         [subView removeFromSuperview];
     }
@@ -129,26 +133,30 @@
 
      NSLog(@"%@", self.subviews);
     self.layer.sublayers = nil;
-    [self drawCoordinate];
+   
 
+    // 数据计算
     self.xAxisSpac =( self.frame.size.width - 2 *self.marginX) / (self.datas.count  -1 );
-    
 
     CGFloat chatHeight = self.frame.size.height - 2 * self.marginY;
     self.yAxisSpac = chatHeight / (self.labelCountY);
     
     NSMutableArray *xValve = [NSMutableArray array];
     NSMutableArray *yValve = [NSMutableArray array];
-
     for (NSInteger i = 0; i < self.datas.count; i ++) {
         OTChatData *data = self.datas[i];
         [xValve addObject:[NSString stringWithFormat:@"%.0f",data.xValue]];
         [yValve addObject:[NSString stringWithFormat:@"%f",data.yValue]];
     }
-    [self setXLineDash:xValve];
-    [self drawYLine];
     
-    [self drawBrokenLine:yValve lineColor:[UIColor blackColor]];
+    // 坐标
+    [self drawCoordinate];
+    // X线
+    [self setXLineDash:xValve];
+    // y线
+    [self drawYLine];
+    // 折线
+    [self drawBrokenLine:yValve lineColor:self.lineColor];
 
 }
 
@@ -166,10 +174,9 @@
 
 - (void)drawCoordinate {
     CAShapeLayer *dashLayer = [CAShapeLayer layer];
-    dashLayer.strokeColor = [UIColor grayColor].CGColor;
+    dashLayer.strokeColor = self.coordinateLineColor.CGColor;
     dashLayer.fillColor = [UIColor clearColor].CGColor;
     dashLayer.lineWidth = 0.5;
-    
     
     UIBezierPath *path = [[UIBezierPath alloc] init];
     CGFloat viewH = self.frame.size.height;
@@ -189,7 +196,7 @@
     for (NSInteger i = 0; i < nodeAry.count; i++) {
         // 分割线属性
         CAShapeLayer *dashLayer = [CAShapeLayer layer];
-        dashLayer.strokeColor = [UIColor grayColor].CGColor;
+        dashLayer.strokeColor = self.lineColor.CGColor;
         dashLayer.fillColor = [UIColor clearColor].CGColor;
         dashLayer.lineWidth = 0.5;
         
@@ -255,7 +262,8 @@
                                                                         size.width, size.height)];
         LabelMonth.text = text;
         LabelMonth.font = [UIFont systemFontOfSize:10];
-        //        LabelMonth.transform = CGAffineTransformMakeRotation(M_PI * 0.3);
+        LabelMonth.textColor = self.coordinateLineColor;
+        
         [self addSubview:LabelMonth];
         // 保存x轴坐标
         [self.xNodeCordAry addObject:[NSString stringWithFormat:@"%f", self.marginX + self.xAxisSpac * i]];
@@ -280,6 +288,7 @@
                                                                             size.width, size.height)];
         labelYdivision.text = text;
         labelYdivision.font = [UIFont systemFontOfSize:10];
+        labelYdivision.textColor = self.coordinateLineColor;
         [self addSubview:labelYdivision];
     }
 }
@@ -330,9 +339,9 @@
     pathAnimation.toValue = [NSNumber numberWithFloat:1.0f];
     [dashLayer addAnimation:pathAnimation forKey:@"strokeEnd"];
     
-    [self drawMarkeroint:brokenLineSpotAry lineColor:lineColor];
+    [self drawMarkeroint:brokenLineSpotAry lineColor:self.pointColor];
 //
-    [self drawBrokenCoverColer:brokenLineSpotAry coverColer:[UIColor redColor]];
+    [self drawBrokenCoverColer:brokenLineSpotAry coverColer:self.coverColor];
 }
 
 
@@ -392,11 +401,9 @@
 // 画标记点
 - (void)drawMarkeroint :(NSArray *)brokenLineSpotAry lineColor:(UIColor *)lineColor {
     // 标记点起点
-    
     CGFloat charViewH = self.frame.size.height - 2 * self.marginY ;
     CGFloat mutiple =  charViewH / self.maxY;
 
-    
     CGPoint markerOrigin = CGPointMake(self.marginX,self.frame.size.height - self.marginY - [[brokenLineSpotAry firstObject] integerValue] * mutiple);
     // 便利折标记点数据
     for (NSInteger i = 1;i <= brokenLineSpotAry.count; i++ ) {

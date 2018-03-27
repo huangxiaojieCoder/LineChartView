@@ -19,14 +19,13 @@
     
     self.markerWidth = rect.size.width;
     self.markerHeight = rect.size.height;
-//    self.markerWidth = 50;
-//    self.markerHeight =30;
+
     self.arrowSize = CGSizeMake(15, 10);
    
     self.radius = 5;
     
-    layer.fillColor = [UIColor blueColor].CGColor;
-
+    layer.fillColor = self.markerColor.CGColor;
+    label.textColor = self.markerTextColor;
 
     // 画弹框
     CGFloat sepeLeftX = self.charViewSize.width * 0.3;
@@ -48,8 +47,7 @@
     } else {
        label.frame = [self drawBottomArrowWithLayer:layer point:point];
     }
-    
-//    label.frame = CGRectMake(100, 100, 100, 100);
+ 
 
 }
 

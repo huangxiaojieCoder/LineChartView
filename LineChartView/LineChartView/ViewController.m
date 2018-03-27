@@ -38,13 +38,11 @@
     
     OTBallonMarker *ballonMarker = [[OTBallonMarker alloc] init];
     ballonMarker.charViewSize = CGSizeMake( [UIScreen mainScreen].bounds.size.width - 100, 400 - 100);
-    ballonMarker.marginY = 50;
-    ballonMarker.marginX = 50;
+    ballonMarker.markerColor = [UIColor yellowColor];
+    ballonMarker.markerTextColor = [UIColor greenColor];
     lineChartView.markerImage = ballonMarker;
     
-    
     NSMutableArray *datas = [NSMutableArray array];
-    
     OTChatData *chatData = [[OTChatData alloc] init];
     chatData.xValue = 1;
     chatData.yValue = 20;
@@ -82,11 +80,7 @@
     
     self.lineChartView = lineChartView;
     
-    
-    // ab
-    
-    
-    NSLog(@"%@", lineChartView);
+
     
 }
 
